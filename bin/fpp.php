@@ -24,7 +24,8 @@ if (! is_readable($path)) {
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$scanner = new Scanner($path);
+$fsIterator = new FilesystemIterator($path);
+$scanner = new Scanner($fsIterator);
 $parser = new Parser();
 $collection = new DefinitionCollection();
 
