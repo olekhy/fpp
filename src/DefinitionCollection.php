@@ -18,12 +18,11 @@ final class DefinitionCollection
 
     public function addDefinition(Definition $definition)
     {
-        if (isset($this->registry[$definition->namespace()][$definition->name()])) {
-            throw new \InvalidArgumentException(sprintf(
-                'Duplicate definition found: %s\\%s',
-                $definition->namespace(),
-                $definition->name()
-            ));
+        $namespace = $definition->namespace();
+        $name = $definition->name();
+        
+        if ($this->hasDefinition($namespace, $name)) {
+            throw new \InvalidArgumentException(sprintf('Duplicate definition found: %s\\%s', $namespace, $name));
         }
 
         $this->registry[$definition->namespace()][$definition->name()] = true;
@@ -38,25 +37,22 @@ final class DefinitionCollection
 
     public function merge(DefinitionCollection $collection): DefinitionCollection
     {
-        $registry = $this->registry;
-        $definitions = $this->definitions;
-
         foreach ($collection->definitions() as $definition) {
-            if ($this->hasDefinition($definition->namespace(), $definition->name())) {
-                throw new \InvalidArgumentException(sprintf(
-                    'Duplicate definition found: %s\\%s',
-                    $definition->namespace(),
-                    $definition->name()
-                ));
+            
+            $namespace = $definition->namespace();
+            $name = $definition->name();
+            
+            if ($this->hasDefinition($namespace, $name())) {
+                throw new \InvalidArgumentException(sprintf('Duplicate definition found: %s\\%s', $namespace, $name));
             }
 
-            $registry[$definition->namespace()][$definition->name()] = true;
-            $definitions[] = $definition;
+            $this->registry[$namespace][$name] = true;
+            $this->definitions[] = $definition;
         }
 
         $collection = new DefinitionCollection();
-        $collection->registry = $registry;
-        $collection->definitions = $definitions;
+        $collection->registry = $this->registry;
+        $collection->definitions = $this->definitions;
 
         return $collection;
     }
