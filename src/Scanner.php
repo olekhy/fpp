@@ -9,9 +9,7 @@ use FilterIterator;
 class Scanner extends FilterIterator
 {
     public function __construct(string $path, Iterator $fileOrDirIterator)
-    {
-        $this->strategy = $strategy;
-        
+    { 
         if (is_readable($path)) {
             parent::__construct($fileOrDirIterator);        
         } else {
