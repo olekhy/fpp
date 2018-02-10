@@ -8,13 +8,9 @@ use FilterIterator;
 
 class Scanner extends FilterIterator
 {
-    public function __construct(string $path, Iterator $fileOrDirIterator)
+    public function __construct(FilesystemIterator $iterator)
     { 
-        if (is_readable($path)) {
-            parent::__construct($fileOrDirIterator);        
-        } else {
-            throw new \RuntimeException('Path: "' . $path . '" is not readable');     
-        }     
+        parent::__construct($iterator);                  
     }    
     
     public function accept()
