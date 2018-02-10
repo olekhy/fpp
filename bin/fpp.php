@@ -21,8 +21,9 @@ if (! is_readable($argv[1])) {
 $path = $argv[1];
 $output = $argv[2];
 
-/* @var \SplFileInfo[] */
-$scanner = new Scanner($path);
+$fsIterator = new FilesystemIterator($path, FilesystemIterator::CURRENT_AS_FILEINFO);
+/* @var \SplFileInfo[] $scanner*/
+$scanner = new Scanner($fsIterator);
 $parser = new Parser();
 $collection = new DefinitionCollection();
 
